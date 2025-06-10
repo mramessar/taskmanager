@@ -4,13 +4,18 @@ import { useTaskContext } from '../context/TaskContext';
 const TaskDetailsPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { tasks } = useTaskContext();
+  const { tasks, deleteTask } = useTaskContext();
 
   const task = tasks.find(t => t.id === Number(id));
 
   if (!task) {
     return <p style={{ padding: '2rem', textAlign: 'center' }}>Task not found.</p>;
   }
+
+  const handleDelete = () => {
+    deleteTask(task.id);
+    navigate('/tasks');
+  };
 
   return (
     <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
@@ -36,9 +41,14 @@ const TaskDetailsPage: React.FC = () => {
         </p>
       </div>
 
-      <button onClick={() => navigate(`/tasks/${task.id}/edit`)}>
-        Edit Task
-      </button>
+      <div style={{ display: 'flex', gap: '1rem' }}>
+        <button onClick={() => navigate(`/tasks/${task.id}/edit`)}>
+          Edit Task
+        </button>
+        <button onClick={handleDelete} style={{ backgroundColor: 'red', color: 'white' }}>
+          Delete Task
+        </button>
+      </div>
     </div>
   );
 };
